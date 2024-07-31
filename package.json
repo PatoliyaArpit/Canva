@@ -14,10 +14,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cloudinary": "^2.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongoose": "^8.5.0"
+    "fcm-node": "^1.6.1",
+    "firebase-admin": "^12.3.0",
+    "formidable": "^3.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.0",
+    "react-use-downloader": "^1.2.8",
+    "twilio": "^5.2.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

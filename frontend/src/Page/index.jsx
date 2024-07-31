@@ -2,15 +2,67 @@ import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { FaFacebookF } from "react-icons/fa";
+import api from "../utils/api";
 
 const index = () => {
   const [type, settype] = useState("");
   const [show, setshow] = useState(false);
+  const [loader,setloader]=useState(false)
   const [state, setstate] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const inputHandle=(e)=>{
+    setstate({
+      ...state,
+      [e.target.name]:e.target.value
+    })
+  }
+  const user_register =async(e)=>{
+    e.preventDefault()
+    try{
+      setloader(true)
+      const {data}=await api.post('/api/user-register',state)
+      setloader(false)
+      // localStorage.setItem('Canva_token',data.token)
+      setstate({
+        name: "",
+        email: "",
+        password: "",
+      })
+      window.location.href='/'
+      console.log(data)
+
+    }catch(error){
+      setloader(false)
+      console.log(error.response)
+
+    }
+
+  }
+  const user_login =async(e)=>{
+    e.preventDefault()
+    try{
+      setloader(true)
+      const {data}=await api.post('/api/user-login',state)
+      setloader(false)
+      localStorage.setItem('Canva_token',data.token)
+      setstate({
+        
+        email: "",
+        password: "",
+      })
+      window.location.href='/'
+      console.log(data)
+
+    }catch(error){
+      setloader(false)
+      console.log(error.response)
+
+    }
+
+  }
   return (
     <div className=" bg-[#18181b] min-h-screen w-full">
       <div
@@ -29,10 +81,11 @@ const index = () => {
             Login or sign up in seconds
           </h2>
           {type === "singin" && (
-            <form>
+            <form onSubmit={user_login}>
               <div className=" flex flex-col gap-3 mb-3 text-white">
                 <label htmlFor="email">Email</label>
                 <input
+                onChange={inputHandle}
                   type="text"
                   name="email"
                   id="email"
@@ -44,6 +97,7 @@ const index = () => {
               <div className=" flex flex-col gap-3 mb-3 text-white">
                 <label htmlFor="password">password</label>
                 <input
+                onChange={inputHandle}
                   type="text"
                   name="password"
                   id="password"
@@ -53,8 +107,8 @@ const index = () => {
                 />
               </div>
               <div>
-                <button className=" px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white">
-                  Sign in
+              <button disabled={loader} className=" px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white">
+                  {loader?"Loading..":"Signin"}
                 </button>
               </div>
               <div className=" flex py-4 justify-between items-center px-3 ">
@@ -83,43 +137,49 @@ const index = () => {
             </form>
           )}
           {type === "signup" && (
-            <form>
+            <form onSubmit={user_register}>
               <div className=" flex flex-col gap-3 mb-3 text-white">
                 <label htmlFor="name">Name</label>
                 <input
+                onChange={inputHandle}
                   type="text"
                   name="name"
                   id="name"
                   placeholder="name enter"
                   value={state.name}
+                  required
                   className=" px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
                 />
               </div>
               <div className=" flex flex-col gap-3 mb-3 text-white">
                 <label htmlFor="email">Email</label>
                 <input
+                onChange={inputHandle}
                   type="text"
                   name="email"
                   id="email"
                   placeholder="Email enter"
                   value={state.email}
+                  required
                   className=" px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
                 />
               </div>
               <div className=" flex flex-col gap-3 mb-3 text-white">
                 <label htmlFor="password">password</label>
                 <input
-                  type="text"
+                onChange={inputHandle}
+                  type="password"
                   name="password"
                   id="password"
                   placeholder="password enter"
                   value={state.password}
+                  required
                   className=" px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent"
                 />
               </div>
               <div>
-                <button className=" px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white">
-                  Sign in
+                <button disabled={loader} className=" px-3 py-2 rounded-md bg-purple-500 w-full outline-none hover:bg-purple-600 text-white">
+                  {loader?"Loading..":"Sign up"}
                 </button>
               </div>
               <div className=" flex py-4 justify-between items-center px-3 ">
